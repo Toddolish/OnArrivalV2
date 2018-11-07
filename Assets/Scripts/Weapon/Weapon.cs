@@ -10,6 +10,8 @@ public class Weapon : MonoBehaviour
 	public float impactForce = 100f;
 	public float fireRate = 15f;
 	private float nextTimeToFire = 0.2f;
+    public float shootRadius = 5f;
+    public float circleRadius = 1f;
 	public Camera fpsCam;
 	public ParticleSystem muzzelFlash;
 	public GameObject impactEffect;
@@ -37,25 +39,30 @@ public class Weapon : MonoBehaviour
 	public bool droppedCanister;
 	Transform canisterHoldingPoint;
 	public GameObject ammoCanister;
-	public bool reloading;
 
-	[Header("UI ELEMENTS")]
+    [Header("Reload")]
+	public bool reloading;
+    public GameObject handEffect;
+    public Transform handEffectPoint;
+
+    [Header("UI ELEMENTS")]
 	[Header("Text")]
 	public Text javTextCartridgeCounter;
 
+    private Vector3 currentPoint;
 	// Hologram Image bar on the weapon Canvas to display to cur ammo;
 	public Image ammoBarImage;
 	#endregion
 
 	void Start()
 	{
-		currentJavAmmo = 0;
+		currentJavAmmo = maxJavAmmo;
 		javAmmoBar = GameObject.Find("LiquidParent").GetComponent<Transform>();
 		canisterHoldingPoint = GameObject.Find("CanisterHolderPoint").GetComponent<Transform>();
 		playerMove = GameObject.Find("Player").GetComponent<PlayerMovment>();
 		ammoBarImage = GameObject.Find("AmmoBar").GetComponent<Image>();
-		
-		if (enemyScript != null)
+
+        if (enemyScript != null)
 		{
 			enemyScript = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
 		}
@@ -107,8 +114,26 @@ public class Weapon : MonoBehaviour
 			}
 		}
 	}
-	void shootJav()
+
+    private void OnDrawGizmos()
+    {
+        float distance = 5f;
+        Transform camTransform = Camera.main.transform;
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(camTransform.position + camTransform.forward * distance, shootRadius);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawSphere(currentPoint, circleRadius);
+    }
+
+    void shootJav()
 	{
+        #region Inaccuracy
+        currentPoint = Random.insideUnitSphere * shootRadius;
+        currentPoint = fpsCam.transform.position + currentPoint * 5f;
+        #endregion
+
+        #region Fire Bullet
         muzzelFlash.Play();
 		currentJavAmmo--;
 		RaycastHit hit;
@@ -131,8 +156,9 @@ public class Weapon : MonoBehaviour
         GameObject feedback = Instantiate(JavalinFeedback, javSpawnPoint.position, fpsCam.transform.rotation);
         feedback.transform.parent = this.transform.parent;
         Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.point));
-	}
-	public void AddSpikeAmmoCapsule()
+        #endregion
+    }
+    public void AddSpikeAmmoCapsule()
 	{
 		javAmmoCartridge += 2;
 	}
@@ -157,8 +183,8 @@ public class Weapon : MonoBehaviour
 	{
 		// Dropped Canister bool = false as we are not dropping this canister until we have 0 ammo
 		droppedCanister = false;
-		// Instanciate new canister onto the canisterHolderPoint
-		GameObject canister = Instantiate(ammoCanister, canisterHoldingPoint.transform.position, canisterHoldingPoint.rotation);
+        // Instanciate new canister onto the canisterHolderPoint
+        GameObject canister = Instantiate(ammoCanister, canisterHoldingPoint.transform.position, canisterHoldingPoint.rotation);
 		// Parent canister to canisterHoldingPoint
 		canister.transform.parent = canisterHoldingPoint.transform;
 		// Find the settings for the new Canister
@@ -175,4 +201,9 @@ public class Weapon : MonoBehaviour
 		}
 		reloading = false;
 	}
+    public void SpawnHandEffect()
+    {
+       GameObject hand = Instantiate(handEffect, handEffectPoint.position, handEffectPoint.rotation);
+       hand.transform.parent = handEffectPoint.transform;
+    }
 }

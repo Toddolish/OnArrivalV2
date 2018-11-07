@@ -51,8 +51,7 @@ GameObject:
   - component: {fileID: 4936594722335634}
   - component: {fileID: 33686262284166804}
   - component: {fileID: 23399357616108088}
-  - component: {fileID: 65120634538159172}
-  - component: {fileID: 64366990220577216}
+  - component: {fileID: 136566897124940376}
   m_Layer: 0
   m_Name: Beacon_Part01
   m_TagString: Beacon
@@ -291,22 +290,8 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1750550553688502}
   m_Mesh: {fileID: 4300012, guid: bb044dc74af585c4d815e44cf79d374b, type: 3}
---- !u!64 &64366990220577216
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1750550553688502}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300012, guid: bb044dc74af585c4d815e44cf79d374b, type: 3}
---- !u!65 &65120634538159172
-BoxCollider:
+--- !u!136 &136566897124940376
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -314,6 +299,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.482313, y: 1.0086792, z: 2.846523}
-  m_Center: {x: 0.54340845, y: 0.32501644, z: -0.042852037}
+  m_Radius: 0.62022626
+  m_Height: 0.9139921
+  m_Direction: 1
+  m_Center: {x: -0.23326321, y: 0.21353723, z: 0.06397893}

@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
 	public Transform target;
 	public float normalSpeed = 3.5f;
 	public float chaseSpeed = 7.0f;
+    public Renderer rend;
 	Animator animator;
 	CapsuleCollider collider;
 	public float burstForce = 2f;
@@ -22,8 +23,13 @@ public class Enemy : MonoBehaviour
 	Weapon weaponScript;
 	PlayerStats playerStats;
 	public GameObject explosion;
+    
+    [Header("Death Transition")]
+    public Color deathColor = Color.black;
+    public float deathDuration = 2f;
+    public AnimationCurve deathTransition;
 
-	[Header("Player Detection")]
+    [Header("Player Detection")]
 	public float SeekRadius = 10f;
 	public float knockbackForce = 5f;
 	public float decreaseSpeed = 1f;
@@ -45,8 +51,11 @@ public class Enemy : MonoBehaviour
 	// Take minor melee damage
 	float resetTime;
 	bool knockedBack;
+    Material glowMat;
+    bool isDead = false;
+    float deathTimer = 0f;
 
-	void SetKinematic(bool newValue)
+    void SetKinematic(bool newValue)
 	{
 		Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
 
@@ -68,7 +77,9 @@ public class Enemy : MonoBehaviour
 		playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
 		target = GameObject.Find("Player").GetComponent<Transform>();
 		collider.enabled = false;
-	}
+        
+        glowMat = rend.materials[1];
+    }
 	public void Update()
 	{
 		#region Enemy seek and Attack
@@ -124,7 +135,10 @@ public class Enemy : MonoBehaviour
 			rb.isKinematic = true;
 			resetTime = 0;
 		}
-		#endregion
+        #endregion
+
+        DeathTransition();
+
 	}
 	private void OnDrawGizmos()
 	{
@@ -169,6 +183,20 @@ public class Enemy : MonoBehaviour
 			}
 		}
 	}
+
+    void DeathTransition()
+    {
+        if(isDead)
+        {
+            deathTimer += Time.deltaTime;
+            float time =  deathTimer / deathDuration;
+            float intensity = deathTransition.Evaluate(time);
+            Color color = glowMat.GetColor("_EmissionColor");
+            glowMat.SetColor("_EmissionColor", color * intensity);
+            glowMat.color = deathColor;
+        }
+    }
+    
 	void Destroy()
 	{
 		//Destroy(this.gameObject);
@@ -178,6 +206,8 @@ public class Enemy : MonoBehaviour
 		animator.enabled = false;
 		agent.enabled = false;
 		aiAgent.enabled = false;
+
+        isDead = true;
 	}
 	void ResetAttack()
 	{
@@ -203,12 +233,12 @@ public class Enemy : MonoBehaviour
 			playerStats.SplashDamage();
 		}
 	}
-	public void Knockback()
+	public void Knockback(Vector3 direction)
 	{
 		if (health <= 0)
 		{
 			SetKinematic(false); // Make sure to set kinematic false before any knockback occurs
-			rb.AddForce(-transform.forward * burstForce * 2f, ForceMode.Impulse);
+			rb.AddForce(direction * burstForce * 2f, ForceMode.Impulse);
 			rb.AddForce(transform.up * burstForce * 1f, ForceMode.Impulse);
 		}
 		if (health > 0)

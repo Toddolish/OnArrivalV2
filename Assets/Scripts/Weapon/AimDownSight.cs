@@ -47,4 +47,8 @@ public class AimDownSight : MonoBehaviour
 	{
 		playerMove.PulseDischarge();
 	}
+    public void ActivateHandEffect()
+    {
+        weapon.SpawnHandEffect();
+    }
 }
