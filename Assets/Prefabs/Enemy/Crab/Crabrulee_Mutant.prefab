@@ -550,8 +550,35 @@ MonoBehaviour:
   target: {fileID: 0}
   normalSpeed: 4
   chaseSpeed: 7
+  rend: {fileID: 0}
   burstForce: 7
   explosion: {fileID: 1844107213730654, guid: cf36fd50fb4fe3046b0605001dbcedde, type: 2}
+  deathColor: {r: 0, g: 0, b: 0, a: 1}
+  deathDuration: 200
+  deathTransition:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.016666412
+      value: 1.018753
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9916687
+      value: -0.012500763
+      inSlope: 2.3683512
+      outSlope: 2.3683512
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.081198454
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   SeekRadius: 15
   knockbackForce: 5
   decreaseSpeed: 1
