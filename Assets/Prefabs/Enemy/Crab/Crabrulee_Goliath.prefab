@@ -563,12 +563,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1500
+  healthDividend: 1500
+  healthBar_Image: {fileID: 0}
   target: {fileID: 0}
   normalSpeed: 7
   chaseSpeed: 10
-  rend: {fileID: 0}
+  rend: {fileID: 137469798088754196}
   burstForce: 7
   explosion: {fileID: 1844107213730654, guid: cf36fd50fb4fe3046b0605001dbcedde, type: 2}
+  canvas: {fileID: 0}
   deathColor: {r: 0, g: 0, b: 0, a: 1}
   deathDuration: 200
   deathTransition:

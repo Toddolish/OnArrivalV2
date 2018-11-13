@@ -4,14 +4,14 @@ using UnityEngine.UI;
 public class Weapon : MonoBehaviour
 {
 	#region Variables
-	[Header("Weapon")] 
+	[Header("Weapon")]
 	public float damage = 10f;
 	public float range = 100f;
 	public float impactForce = 100f;
 	public float fireRate = 15f;
 	private float nextTimeToFire = 0.2f;
-    public float shootRadius = 5f;
-    public float circleRadius = 1f;
+	public float shootRadius = 5f;
+	public float circleRadius = 0.1f;
 	public Camera fpsCam;
 	public ParticleSystem muzzelFlash;
 	public GameObject impactEffect;
@@ -33,23 +33,23 @@ public class Weapon : MonoBehaviour
 	float javAmmoY = 1f;
 	public Transform javSpawnPoint;
 	public GameObject Javalin;
-    public GameObject JavalinFeedback;
+	public GameObject JavalinFeedback;
 	float javSpeed = 50;
 	public int javAmmoCartridge;
 	public bool droppedCanister;
 	Transform canisterHoldingPoint;
 	public GameObject ammoCanister;
 
-    [Header("Reload")]
+	[Header("Reload")]
 	public bool reloading;
-    public GameObject handEffect;
-    public Transform handEffectPoint;
+	public GameObject handEffect;
+	public Transform handEffectPoint;
 
-    [Header("UI ELEMENTS")]
+	[Header("UI ELEMENTS")]
 	[Header("Text")]
 	public Text javTextCartridgeCounter;
 
-    private Vector3 currentPoint;
+	private Vector3 currentPoint;
 	// Hologram Image bar on the weapon Canvas to display to cur ammo;
 	public Image ammoBarImage;
 	#endregion
@@ -62,7 +62,7 @@ public class Weapon : MonoBehaviour
 		playerMove = GameObject.Find("Player").GetComponent<PlayerMovment>();
 		ammoBarImage = GameObject.Find("AmmoBar").GetComponent<Image>();
 
-        if (enemyScript != null)
+		if (enemyScript != null)
 		{
 			enemyScript = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
 		}
@@ -71,6 +71,7 @@ public class Weapon : MonoBehaviour
 
 	void Update()
 	{
+		ShowEnemyInformation();
 		ammoBarImage.fillAmount = currentJavAmmo / 30;
 		javTextCartridgeCounter.text = javAmmoCartridge.ToString();
 		Reload();
@@ -115,26 +116,26 @@ public class Weapon : MonoBehaviour
 		}
 	}
 
-    private void OnDrawGizmos()
-    {
-        float distance = 5f;
-        Transform camTransform = Camera.main.transform;
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(camTransform.position + camTransform.forward * distance, shootRadius);
-
-        Gizmos.color = Color.white;
-        Gizmos.DrawSphere(currentPoint, circleRadius);
-    }
-
-    void shootJav()
+	private void OnDrawGizmos()
 	{
-        #region Inaccuracy
-        currentPoint = Random.insideUnitSphere * shootRadius;
-        currentPoint = fpsCam.transform.position + currentPoint * 5f;
-        #endregion
+		float distance = 5f;
+		Transform camTransform = Camera.main.transform;
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawWireSphere(camTransform.position + camTransform.forward * distance, shootRadius);
 
-        #region Fire Bullet
-        muzzelFlash.Play();
+		Gizmos.color = Color.white;
+		Gizmos.DrawSphere(currentPoint, circleRadius);
+	}
+
+	void shootJav()
+	{
+		#region Inaccuracy
+		currentPoint = Random.insideUnitSphere * shootRadius;
+		currentPoint = fpsCam.transform.position + currentPoint * 2f;
+		#endregion
+
+		#region Fire Bullet
+		muzzelFlash.Play();
 		currentJavAmmo--;
 		RaycastHit hit;
 		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, layersToHit))
@@ -153,12 +154,12 @@ public class Weapon : MonoBehaviour
 		}
 		// Instanciate outside of ray as it has been causeing spawn issues
 		Instantiate(Javalin, hit.point, fpsCam.transform.rotation);
-        GameObject feedback = Instantiate(JavalinFeedback, javSpawnPoint.position, fpsCam.transform.rotation);
-        feedback.transform.parent = this.transform.parent;
-        Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.point));
-        #endregion
-    }
-    public void AddSpikeAmmoCapsule()
+		GameObject feedback = Instantiate(JavalinFeedback, javSpawnPoint.position, fpsCam.transform.rotation);
+		feedback.transform.parent = this.transform.parent;
+		Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.point));
+		#endregion
+	}
+	public void AddSpikeAmmoCapsule()
 	{
 		javAmmoCartridge += 2;
 	}
@@ -171,7 +172,7 @@ public class Weapon : MonoBehaviour
 			// Play the reload animation
 			//////////////////////////////////////////////////// change will be need for animation to spawn
 			PlayerAnim.SetTrigger("Reload");
-			
+
 			// Check ammo cartridge so it does not go below zero and if so will always be set back to zero --- canister counter
 			if (javAmmoCartridge <= 0)
 			{
@@ -183,8 +184,8 @@ public class Weapon : MonoBehaviour
 	{
 		// Dropped Canister bool = false as we are not dropping this canister until we have 0 ammo
 		droppedCanister = false;
-        // Instanciate new canister onto the canisterHolderPoint
-        GameObject canister = Instantiate(ammoCanister, canisterHoldingPoint.transform.position, canisterHoldingPoint.rotation);
+		// Instanciate new canister onto the canisterHolderPoint
+		GameObject canister = Instantiate(ammoCanister, canisterHoldingPoint.transform.position, canisterHoldingPoint.rotation);
 		// Parent canister to canisterHoldingPoint
 		canister.transform.parent = canisterHoldingPoint.transform;
 		// Find the settings for the new Canister
@@ -201,9 +202,21 @@ public class Weapon : MonoBehaviour
 		}
 		reloading = false;
 	}
-    public void SpawnHandEffect()
-    {
-       GameObject hand = Instantiate(handEffect, handEffectPoint.position, handEffectPoint.rotation);
-       hand.transform.parent = handEffectPoint.transform;
-    }
+	public void SpawnHandEffect()
+	{
+		GameObject hand = Instantiate(handEffect, handEffectPoint.position, handEffectPoint.rotation);
+		hand.transform.parent = handEffectPoint.transform;
+	}
+	void ShowEnemyInformation()
+	{
+		RaycastHit hit;
+		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+		{
+			Enemy enemy = hit.transform.GetComponent<Enemy>();
+			if (enemy != null && enemy.health > 0)
+			{
+				enemy.canvas.SetActive(true);
+			}
+		}
+	}
 }

@@ -66,6 +66,8 @@ public class PlayerMovment : MonoBehaviour
     #region Extract
     bool extractReady;
     float extractCooldown;
+	public GameObject extractEffect;
+	public Transform extractSpawnEffect;
     #endregion
 
     public Text beaconText;
@@ -159,7 +161,10 @@ public class PlayerMovment : MonoBehaviour
                             {
                                 extractReady = false;
                                 animMain.SetTrigger("Extract");
-                            }
+								GameObject extract = Instantiate(extractEffect, extractSpawnEffect.position, extractSpawnEffect.rotation);
+								extract.transform.parent = this.transform;
+
+							}
                         }
                     }
                     else
@@ -198,17 +203,14 @@ public class PlayerMovment : MonoBehaviour
         if (other.gameObject.tag == "Beacon")
         {
             beaconText.enabled = true;
-            if (beaconIndex == 0)
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
                     FindObjectOfType<AudioManager>().Play("Pickup");
                     // Increase beacon index
                     // Disable Beacon Text
                     beaconIndex++;
                     beaconText.enabled = false;
                     Destroy(other.gameObject);
-                }
             }
         }
     }

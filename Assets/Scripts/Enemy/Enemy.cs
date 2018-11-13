@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using SteeringBehaviours;
 
 public class Enemy : MonoBehaviour
 {
 	[Header("Base Variables")]
 	public float health = 50f;
+	public float healthDividend;
+	public Image healthBar_Image;
 	Rigidbody rb;
 	NavMeshAgent agent;
 	public Transform target;
@@ -23,8 +26,11 @@ public class Enemy : MonoBehaviour
 	Weapon weaponScript;
 	PlayerStats playerStats;
 	public GameObject explosion;
-    
-    [Header("Death Transition")]
+	//Enemy Canvas
+	public GameObject canvas;
+	float CanvasCounter;
+
+	[Header("Death Transition")]
     public Color deathColor = Color.black;
     public float deathDuration = 2f;
     public AnimationCurve deathTransition;
@@ -46,6 +52,7 @@ public class Enemy : MonoBehaviour
 	float attackAfterTime = 1;
 	bool attackInRange;
 	public float AttackRange = 2;
+	//Transform[] trans;// 0,1,2,3 i want to get 3 and change the position
 
 	// Enemy Knockback 
 	// Take minor melee damage
@@ -55,6 +62,7 @@ public class Enemy : MonoBehaviour
     bool isDead = false;
     float deathTimer = 0f;
 
+	
     void SetKinematic(bool newValue)
 	{
 		Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
@@ -63,6 +71,21 @@ public class Enemy : MonoBehaviour
 		{
 			rb.isKinematic = newValue;
 		}
+
+		/*for (int i = 0; i <= trans.Length; i++)
+		{
+			if (i <= 3)
+			{
+				if (i == 3)
+				{
+
+				}
+			}
+			else
+			{
+				break;
+			}
+		}*/
 	}
 
 	private void Start()
@@ -77,11 +100,17 @@ public class Enemy : MonoBehaviour
 		playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
 		target = GameObject.Find("Player").GetComponent<Transform>();
 		collider.enabled = false;
-        
-        glowMat = rend.materials[1];
-    }
+		glowMat = rend.materials[1];
+		canvas.SetActive(false);
+	}
 	public void Update()
 	{
+		CanvasCounter += Time.deltaTime;
+		if (CanvasCounter > 0.5f)
+		{
+			canvas.SetActive(false);
+			CanvasCounter = 0;
+		}
 		#region Enemy seek and Attack
 		if (agro)
 		{
@@ -93,6 +122,7 @@ public class Enemy : MonoBehaviour
 		float disToTarget = Vector3.Distance(transform.position, target.position);
 		#endregion
 		#region Enemy Health
+		healthBar_Image.fillAmount = health / healthDividend;
 		if (health > 0)
 		{
 			if (SeekRadius > disToTarget)
@@ -206,8 +236,8 @@ public class Enemy : MonoBehaviour
 		animator.enabled = false;
 		agent.enabled = false;
 		aiAgent.enabled = false;
-
-        isDead = true;
+		canvas.SetActive(false);
+		isDead = true;
 	}
 	void ResetAttack()
 	{
