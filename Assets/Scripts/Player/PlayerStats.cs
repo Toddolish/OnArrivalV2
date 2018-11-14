@@ -31,7 +31,7 @@ public class PlayerStats : MonoBehaviour
 
 	void Start()
 	{
-        curHealth = maxHealth;
+        curHealth = 25;
 		curEnergy = maxEnergy;
 		energyBar = GameObject.Find("EnergyBar").GetComponent<Image>();
 	}
