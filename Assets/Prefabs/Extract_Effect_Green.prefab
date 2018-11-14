@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4832449271490958}
   m_Layer: 0
-  m_Name: Extract_Effect
+  m_Name: Extract_Effect_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -172,7 +172,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1625767411814900}
   m_LocalRotation: {x: 0, y: 0.7071066, z: 0, w: -0.70710695}
-  m_LocalPosition: {x: 97.51056, y: 43.21, z: -32.05063}
+  m_LocalPosition: {x: 97.81, y: 42.8, z: -29.07695}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4934761383309506}
@@ -9450,7 +9450,7 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 937ab70392d9e4646a47bb99b6208c67, type: 2}
+  - {fileID: 2100000, guid: a0325a7a1a42a344fac0cff3bdb18522, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -9507,7 +9507,7 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 20e837303e024714f9609f5711909e3b, type: 2}
+  - {fileID: 2100000, guid: 7a87a5d31fa726b4aab9d291a87cf896, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0

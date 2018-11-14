@@ -36,20 +36,20 @@ public class PlayerStats : MonoBehaviour
 		energyBar = GameObject.Find("EnergyBar").GetComponent<Image>();
 	}
 
-	void Update()
-	{
+    void Update()
+    {
         #region Health
         healthBar_Object.transform.localScale = new Vector3(0.125382f, heathBarScaleY, 0.125382f);
         heathBarScaleY = curHealth / 263;
         if (curHealth <= 0)
-		{
-			GameOver();
-			curHealth = 0;
-		}
-		else if (curHealth > maxHealth)
-		{
-			curHealth = maxHealth;
-		}
+        {
+            GameOver();
+            curHealth = 0;
+        }
+        else if (curHealth > maxHealth)
+        {
+            curHealth = maxHealth;
+        }
         if (curHealth <= 50)
         {
             healthMesh.material = redHealth;
@@ -57,6 +57,14 @@ public class PlayerStats : MonoBehaviour
         else if (curHealth > 51)
         {
             healthMesh.material = greenHealth;
+        }
+        if (curHealth <= 25)
+        {
+            splashAnim.SetBool("Low", true);
+        }
+        else
+        {
+            splashAnim.SetBool("Low", false);
         }
 		#endregion
 

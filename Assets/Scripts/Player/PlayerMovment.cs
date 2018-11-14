@@ -67,7 +67,8 @@ public class PlayerMovment : MonoBehaviour
     bool extractReady;
     float extractCooldown;
 	public GameObject extractEffect;
-	public Transform extractSpawnEffect;
+    public GameObject GreenExtractEffect;
+    public Transform extractSpawnEffect;
     #endregion
 
     public Text beaconText;
@@ -161,10 +162,18 @@ public class PlayerMovment : MonoBehaviour
                             {
                                 extractReady = false;
                                 animMain.SetTrigger("Extract");
-								GameObject extract = Instantiate(extractEffect, extractSpawnEffect.position, extractSpawnEffect.rotation);
-								extract.transform.parent = this.transform;
+                                if (spikePlant.collectHealth)
+                                {
+                                    GameObject extract = Instantiate(GreenExtractEffect, extractSpawnEffect.position, extractSpawnEffect.rotation);
+                                    extract.transform.parent = this.transform;
+                                }
+                                else if (!spikePlant.collectHealth)
+                                {
+                                    GameObject extract = Instantiate(extractEffect, extractSpawnEffect.position, extractSpawnEffect.rotation);
+                                    extract.transform.parent = this.transform;
+                                }
 
-							}
+                            }
                         }
                     }
                     else
