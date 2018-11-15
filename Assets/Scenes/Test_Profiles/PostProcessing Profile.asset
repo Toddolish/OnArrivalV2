@@ -31,7 +31,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 17.09
+    value: 3.65
   threshold:
     overrideState: 1
     value: 1
@@ -92,7 +92,7 @@ MonoBehaviour:
     value: 1
   sampleDist:
     overrideState: 1
-    value: 2.39
+    value: 1
   edgesOnly:
     overrideState: 1
     value: 0
