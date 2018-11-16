@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
     public Color deathColor = Color.black;
     public float deathDuration = 2f;
     public AnimationCurve deathTransition;
+    public static int enemyKillCount;
 
     [Header("Player Detection")]
 	public float SeekRadius = 10f;
@@ -52,17 +53,12 @@ public class Enemy : MonoBehaviour
 	float attackAfterTime = 1;
 	bool attackInRange;
 	public float AttackRange = 2;
-	//Transform[] trans;// 0,1,2,3 i want to get 3 and change the position
-
-	// Enemy Knockback 
-	// Take minor melee damage
 	float resetTime;
 	bool knockedBack;
     Material glowMat;
     bool isDead = false;
     float deathTimer = 0f;
-
-	
+    
     void SetKinematic(bool newValue)
 	{
 		Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
@@ -71,21 +67,6 @@ public class Enemy : MonoBehaviour
 		{
 			rb.isKinematic = newValue;
 		}
-
-		/*for (int i = 0; i <= trans.Length; i++)
-		{
-			if (i <= 3)
-			{
-				if (i == 3)
-				{
-
-				}
-			}
-			else
-			{
-				break;
-			}
-		}*/
 	}
 
 	private void Start()
@@ -273,7 +254,8 @@ public class Enemy : MonoBehaviour
 		}
 		if (health > 0)
 		{
-			knockedBack = true;
+            enemyKillCount++;
+            knockedBack = true;
 		}
 	}
 }

@@ -70,6 +70,11 @@ public class PlayerMovment : MonoBehaviour
     public GameObject GreenExtractEffect;
     public Transform extractSpawnEffect;
     #endregion
+    #region Tutorial
+    public bool restrainMovement;
+    public bool restrainMelee;
+    public bool restrainExtract;
+    #endregion
 
     public Text beaconText;
     void Start()
@@ -82,19 +87,35 @@ public class PlayerMovment : MonoBehaviour
         playerStats = GetComponent<PlayerStats>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
+
+        restrainMovement = true;
+        restrainMelee = true;
+        restrainExtract = true;
     }
     private void Update()
     {
         #region Methods
-        Extract();
-        Jump();
-        PulseCharge();
-        Sprinting();
+        if (!restrainMovement)
+        {
+            Jump();
+            Sprinting();
+        }
+        if (restrainExtract)
+        {
+            Extract();
+        }
+        if (!restrainMelee)
+        {
+            PulseCharge();
+        }
         #endregion
     }
     private void LateUpdate()
     {
-        Movement();
+        if (!restrainMovement) // Tutorial must be finished
+        {
+            Movement();
+        }
     }
     public void Jump()
     {

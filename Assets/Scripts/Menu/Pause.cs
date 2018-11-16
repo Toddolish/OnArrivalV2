@@ -37,7 +37,7 @@ public class Pause : MonoBehaviour
 		pausePanel.SetActive(false);
 		Cursor.visible = false;
 		paused = false;
-		// setting the timeScale to 1 so game is unpaused
+		// Setting the timeScale to 1 so game is unpaused
 		Time.timeScale = 1;
 	}
 	public void BackToMenu()
@@ -53,7 +53,7 @@ public class Pause : MonoBehaviour
 			pausePanel.SetActive(true);
 			paused = true;
 			Cursor.visible = true;
-			// setting the timeScale to 0 so game is paused
+			// Setting the timeScale to 0 so game is paused
 			Time.timeScale = 0;
 		}
 		else if (Input.GetKeyDown(KeyCode.P) && paused || Input.GetKeyDown(KeyCode.Escape) && paused)
@@ -61,7 +61,7 @@ public class Pause : MonoBehaviour
 			pausePanel.SetActive(false);
 			paused = false;
 			Cursor.visible = false;
-			// setting the timeScale to 1 so game is unpaused
+			// Setting the timeScale to 1 so game is unpaused
 			Time.timeScale = 1;
 		}
 
