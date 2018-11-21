@@ -64,7 +64,7 @@ public class Projectile : MonoBehaviour {
 			flying = false;
 		}
 		//enemyRigid.AddForce(transform.forward * enemyScript.burstForce, ForceMode.Impulse);
-		if (collision.gameObject.tag == "Crab" || collision.gameObject.tag == "SpikeJaw")
+		if (collision.gameObject.tag == "Crab" || collision.gameObject.tag == "SpikeJaw" || collision.gameObject.tag == "Shelka")
 		{
 			// Create a anchor point for arrow to follow
 			GameObject anchor = new GameObject("Javalin_Anchor");

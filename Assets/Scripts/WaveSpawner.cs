@@ -99,7 +99,7 @@ public class WaveSpawner : MonoBehaviour
         if (searchCountdown < 3f)
         {
             searchCountdown = 0.1f;
-            if (GameObject.FindGameObjectWithTag("Crab") == null)
+            if (GameObject.FindGameObjectWithTag("Shelka") == null)
             {
                 return false;
             }

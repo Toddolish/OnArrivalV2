@@ -236,7 +236,7 @@ public class PlayerMovment : MonoBehaviour
             beaconText.enabled = true;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                spawner.SetActive(true);
+                spawner.GetComponent<WaveSpawner>().enabled = true;
                 FindObjectOfType<AudioManager>().Play("Pickup");
                 // Increase beacon index
                 // Disable Beacon Text

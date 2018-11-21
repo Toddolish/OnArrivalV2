@@ -18,6 +18,7 @@ TagManager:
   - noHit
   - Beacon
   - Void
+  - Shelka
   layers:
   - Default
   - TransparentFX

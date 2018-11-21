@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 114469354610911484}
   m_Layer: 0
   m_Name: Shelka
-  m_TagString: Crab
+  m_TagString: Shelka
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -730,6 +730,7 @@ MonoBehaviour:
   burstForce: 7
   explosion: {fileID: 1844107213730654, guid: cf36fd50fb4fe3046b0605001dbcedde, type: 2}
   canvas: {fileID: 1412611754906352}
+  crabParts: []
   deathColor: {r: 0, g: 0, b: 0, a: 1}
   deathDuration: 5
   deathTransition:
@@ -756,11 +757,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SeekRadius: 10
+  SeekRadius: 2000
   knockbackForce: 5
   decreaseSpeed: 1
   agro: 0
-  agroRange: 200
+  agroRange: 2000
   attacked: 0
   attackTimer: 0
   AttackRange: 2
