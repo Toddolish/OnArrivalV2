@@ -18,10 +18,10 @@ public class GameManager : MonoBehaviour
     //timer
     public float storyTimer;
     public float timer;
-    float completeTimer = 8f;
-    float moveTimer = 8;
-    float extractTimer = 6;
-    float followTimer = 1;
+    float completeTimer = 4f;
+    float moveTimer = 4;
+    float extractTimer = 3;
+    float followTimer = 0.5f;
     public bool runTimer;
     #endregion
 
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         SelectText(speechIndex);
         #region Tutorial Input
-        if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 0 || speechIndex == 2 || speechIndex == 4 || speechIndex == 5 || speechIndex == 11))
+        if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 0 || speechIndex == 2 || speechIndex == 4 || speechIndex == 11))
         {
             // Skip to next speech in tutorial
             speechIndex++;
@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
         {
             if (speechIndex == 6)
             {
-                if (Input.GetKeyDown(KeyCode.R))
+                if (Input.GetKeyDown(KeyCode.R) && weapon.javAmmoCartridge > 0)
                 {
                     //timer = followTimer;
                     //runTimer = true;
@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
         {
             eSkip.enabled = false;
         }
-        if ((speechIndex == 2 || speechIndex == 5 || speechIndex == 7 || speechIndex == 11 ) && eSkip.enabled == false)
+        if ((speechIndex == 2 || speechIndex == 7 || speechIndex == 11 ) && eSkip.enabled == false)
         {
             eSkip.enabled = true;
         }

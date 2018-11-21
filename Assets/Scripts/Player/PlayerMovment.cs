@@ -62,11 +62,12 @@ public class PlayerMovment : MonoBehaviour
     // Create and index for beacons how many you have collected
     public int beaconIndex;
     public Text alreadyText;
+    public GameObject spawner;
     #endregion
     #region Extract
     bool extractReady;
     float extractCooldown;
-	public GameObject extractEffect;
+    public GameObject extractEffect;
     public GameObject GreenExtractEffect;
     public Transform extractSpawnEffect;
     #endregion
@@ -235,12 +236,13 @@ public class PlayerMovment : MonoBehaviour
             beaconText.enabled = true;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                    FindObjectOfType<AudioManager>().Play("Pickup");
-                    // Increase beacon index
-                    // Disable Beacon Text
-                    beaconIndex++;
-                    beaconText.enabled = false;
-                    Destroy(other.gameObject);
+                spawner.SetActive(true);
+                FindObjectOfType<AudioManager>().Play("Pickup");
+                // Increase beacon index
+                // Disable Beacon Text
+                beaconIndex++;
+                beaconText.enabled = false;
+                Destroy(other.gameObject);
             }
         }
     }
@@ -361,8 +363,8 @@ public class PlayerMovment : MonoBehaviour
                 shootHit = hits[i];
                 if (enemyScript = shootHit.collider.gameObject.GetComponent<Enemy>())
                 {
-                   enemyScript.health -= 100;
-                   enemyScript.Knockback(transform.forward);
+                    enemyScript.health -= 100;
+                    enemyScript.Knockback(transform.forward);
                 }
             }
         }

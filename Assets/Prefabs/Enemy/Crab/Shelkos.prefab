@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 114546848768995384}
   - component: {fileID: 114985418655961738}
   m_Layer: 0
-  m_Name: Crabrulee_Mutant
+  m_Name: Shelkos
   m_TagString: Crab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -706,20 +706,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.016666412
       value: 1.018753
-      inSlope: 0
-      outSlope: 0
+      inSlope: -1.0747443
+      outSlope: -1.0747443
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.17500007
     - serializedVersion: 3
       time: 0.9916687
       value: -0.012500763
-      inSlope: 2.3683512
-      outSlope: 2.3683512
+      inSlope: -1.139701
+      outSlope: -1.139701
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.081198454
+      inWeight: 0.116666615
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

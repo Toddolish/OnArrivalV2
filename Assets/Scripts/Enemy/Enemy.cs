@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
 	public GameObject explosion;
 	//Enemy Canvas
 	public GameObject canvas;
+    public GameObject[] crabParts;
 	float CanvasCounter;
 
 	[Header("Death Transition")]
@@ -126,6 +127,10 @@ public class Enemy : MonoBehaviour
 		}
 		if (health <= 0)
 		{
+            foreach (GameObject gameObject in crabParts)
+            {
+               // crabParts.get
+            }
 			this.gameObject.tag = "noHit";
 			this.gameObject.layer = LayerMask.NameToLayer("Ignore");
 			Destroy();

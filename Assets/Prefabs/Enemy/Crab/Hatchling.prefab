@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 114857577921990714}
   - component: {fileID: 114048629447944956}
   m_Layer: 0
-  m_Name: Crabrulee_Hatching
+  m_Name: Hatchling
   m_TagString: Crab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
