@@ -7,9 +7,12 @@ public class Projectile : MonoBehaviour {
 	Rigidbody rb;
 	CapsuleCollider CapCollider;
 	bool flying = true;
-	float depth = 0.30F;
+	float depth = 0.30f;
 	Camera cam;
 	private Transform anchor;
+
+    //Destroy 
+    float destroyTimer;
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -33,8 +36,16 @@ public class Projectile : MonoBehaviour {
 			this.transform.position = anchor.transform.position;
 			this.transform.rotation = anchor.transform.rotation;
 		}
-	}
-	private void OnCollisionEnter(Collision collision)
+        #region Destroy
+        destroyTimer += Time.deltaTime;
+
+        if (destroyTimer > 10)
+        {
+            Destroy(gameObject);
+        }
+        #endregion
+    }
+    private void OnCollisionEnter(Collision collision)
 	{
 		transform.position = collision.contacts[0].point;
 		Enemy enemyScript = collision.gameObject.GetComponent<Enemy>();
@@ -78,31 +89,6 @@ public class Projectile : MonoBehaviour {
 			rb.constraints = RigidbodyConstraints.FreezeAll;
 			flying = false;
 			speed = 0;
-			//enemyRigid.AddForce(transform.forward * enemyScript.burstForce, ForceMode.Impulse);
 		}
-		// Parent the enemy to the projectile 
-		/*if(collision.gameObject.tag == "Enemy")
-		{
-			if (enemyScript.health <= 0)
-			{
-				enemyTransform.SetParent(this.transform);
-				//enemyTransform.position = this.transform.position;
-				enemyRigid.isKinematic = true; // This would be rag doll
-				if (collision.gameObject.tag == "Trees" || collision.gameObject.tag == "spikePlant")
-				{
-					//enemyCollider.isTrigger = true;
-					GameObject anchor = new GameObject("Javalin_Anchor");
-					anchor.transform.position = this.transform.position;
-					anchor.transform.rotation = this.transform.rotation;
-					anchor.transform.parent = collision.transform;
-					this.anchor = anchor.transform;
-					rb.isKinematic = true;
-					this.transform.GetChild(0).GetComponent<CapsuleCollider>().isTrigger = true;
-					rb.constraints = RigidbodyConstraints.FreezeAll;
-					flying = false;
-					speed = 0;
-				}
-			}
-		}*/
 	}
 }

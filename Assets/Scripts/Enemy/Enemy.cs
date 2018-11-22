@@ -74,12 +74,22 @@ public class Enemy : MonoBehaviour
     void SetKinematic(bool newValue)
 	{
 		Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        
 
 		foreach (Rigidbody rb in bodies)
 		{
 			rb.isKinematic = newValue;
 		}
 	}
+    void DisableColliders(bool newValue)
+    {
+        CapsuleCollider[] colliders = GetComponentsInChildren<CapsuleCollider>();
+
+        foreach (CapsuleCollider collider in colliders)
+        {
+            collider.enabled = newValue;
+        }
+    }
 
 	private void Start()
 	{
@@ -170,9 +180,13 @@ public class Enemy : MonoBehaviour
         if (sink)
         {
             destroyTimer += Time.deltaTime;
-            transform.Translate(Vector3.down * sinkSpeed);
+            //transform.Translate(Vector3.down * sinkSpeed);
 
             if (destroyTimer > 5)
+            {
+                DisableColliders(true);
+            }
+            if(destroyTimer > 10)
             {
                 Destroy(this.gameObject);
             }

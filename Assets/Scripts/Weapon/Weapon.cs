@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
-	#region Variables
+	#region Weapon
 	[Header("Weapon")]
 	public float damage = 10f;
 	public float range = 100f;
@@ -22,8 +22,9 @@ public class Weapon : MonoBehaviour
 	public Animator PlayerAnim;
 	Enemy enemyScript;
 	PlayerMovment playerMove;
-
-	[Header("Jav Ammo Rounds")]
+    #endregion
+    #region Javalin Ammo
+    [Header("Jav Ammo Rounds")]
 	public float currentJavAmmo;
 	public float maxJavAmmo;
 	public bool javAmmoActive = true;
@@ -39,13 +40,20 @@ public class Weapon : MonoBehaviour
 	public bool droppedCanister;
 	Transform canisterHoldingPoint;
 	public GameObject ammoCanister;
-
-	[Header("Reload")]
+    #endregion
+    #region Reload
+    [Header("Reload")]
 	public bool reloading;
 	public GameObject handEffect;
 	public Transform handEffectPoint;
+    GameManager manager;
 
-	[Header("UI ELEMENTS")]
+    // Auto reload
+    bool autoReload;
+
+    #endregion
+    #region UI Elements
+    [Header("UI ELEMENTS")]
 	[Header("Text")]
 	public Text javTextCartridgeCounter;
 
@@ -60,7 +68,8 @@ public class Weapon : MonoBehaviour
 		javAmmoBar = GameObject.Find("LiquidParent").GetComponent<Transform>();
 		canisterHoldingPoint = GameObject.Find("CanisterHolderPoint").GetComponent<Transform>();
 		playerMove = GameObject.Find("Player").GetComponent<PlayerMovment>();
-		ammoBarImage = GameObject.Find("AmmoBar").GetComponent<Image>();
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        ammoBarImage = GameObject.Find("AmmoBar").GetComponent<Image>();
 
 		if (enemyScript != null)
 		{
@@ -178,6 +187,30 @@ public class Weapon : MonoBehaviour
 				javAmmoCartridge = 0;
 			}
 		}
+        if (manager.learnedToReload)
+        {
+            if (autoReload)
+            {
+                if (javAmmoCartridge > 0 && currentJavAmmo <= 0 && !reloading)
+                {
+                    reloading = true;
+                    // Play the reload animation
+                    //////////////////////////////////////////////////// change will be need for animation to spawn
+                    PlayerAnim.SetTrigger("Reload");
+
+                    // Check ammo cartridge so it does not go below zero and if so will always be set back to zero --- canister counter
+                    if (javAmmoCartridge <= 0)
+                    {
+                        javAmmoCartridge = 0;
+                    }
+                    autoReload = false;
+                }
+            }
+            if (javAmmoCartridge > 0 && currentJavAmmo <= 0 && !reloading)
+            {
+                autoReload = true;
+            }
+        }
 	}
 	public void SpawnCanister()
 	{
