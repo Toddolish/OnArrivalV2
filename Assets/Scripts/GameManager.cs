@@ -10,10 +10,12 @@ public class GameManager : MonoBehaviour
     bool tutorialComplete;
     public Text[] tutTexts;
     public int speechIndex;
-    public GameObject tutorialCanvas;
+    public GameObject tutorialCanvas, skipCanvas;
     public GameObject damageSplashScreen;
     public Text eSkip;
     public MouseLook[] mouselooks;
+    // Tutorial crabs
+    public GameObject[] crabs;
 
     //timer
     public float storyTimer;
@@ -38,6 +40,9 @@ public class GameManager : MonoBehaviour
     public bool learnedToReload;
     public bool learnToShoot;
     public bool learnToMelee;
+
+    // skip tutorial
+    bool skipTutorial;
     #endregion
     void Start()
     {
@@ -61,161 +66,162 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        SelectText(speechIndex);
-        #region Tutorial Input
-        if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 0 || speechIndex == 2 || speechIndex == 4 || speechIndex == 11))
+        SkipTutorial();
+        if (!skipTutorial)
         {
-            // Skip to next speech in tutorial
-            speechIndex++;
-        }
-        if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 7))
-        {
-            // Skip to next speech in tutorial
-            speechIndex++;
-            timer = followTimer;
-            runTimer = true;
-            wisp.waypointIndex++;
-        }
-        if(speechIndex == 12)
-        {
-            tutorialComplete = true;
-            tutorialCanvas.SetActive(false);
-        }
-        //if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 11))
-        //{
-        //    Skip to next speech in tutorial
-        //    tutorialComplete = true;
-        //    tutorialCanvas.SetActive(false);
-        //}
-        #region Look Around
-        // Look around
-        // if mouse input
-        if (!canLook && speechIndex == 1)
-        {
-            for (int i = 0; i < mouselooks.Length; i++)
+            #region Tutorial Input
+            SelectText(speechIndex);
+            #region Inputs
+            if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 0 || speechIndex == 2 || speechIndex == 4 || speechIndex == 11))
             {
-                mouselooks[i].enabled = true;
-            }
-            if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
-            {
-                // increase speechIndex
+                // Skip to next speech in tutorial
                 speechIndex++;
-                // set canLook to true
-                canLook = true;
-                Debug.Log("Mouse Movement");
-
             }
-        }
-        #endregion
-        #region Learn to Walk
-        // Learn to walk 
-        if (!learnedToWalk)
-        {
-            if (speechIndex == 3)
+            if (Input.GetKeyDown(KeyCode.E) && (speechIndex == 7))
             {
-                if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-                {
-                    timer = moveTimer;
-                    learnedToWalk = true;
-                    playerMove.restrainMovement = false;
-                    runTimer = true;
-                    wisp.waypointIndex = +2;
-                }
-            }
-        }
-        #endregion
-        #region Extract Health
-        if (!learnedToExtractHealth && (speechIndex == 4 || speechIndex == 5))
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                // Extract is now true
-                timer = extractTimer;
+                // Skip to next speech in tutorial
+                speechIndex++;
+                timer = followTimer;
                 runTimer = true;
                 wisp.waypointIndex++;
-                learnedToExtractHealth = true;
             }
-        }
-        #endregion
-        #region Learn to Reload
-        if (!learnedToReload)
-        {
-            if (speechIndex == 6)
+            if (speechIndex == 12)
             {
-                if (Input.GetKeyDown(KeyCode.R) && weapon.javAmmoCartridge > 0)
+                tutorialComplete = true;
+                tutorialCanvas.SetActive(false);
+            }
+            #endregion
+            #region Look Around
+            // Look around
+            // if mouse input
+            if (!canLook && speechIndex == 1)
+            {
+                for (int i = 0; i < mouselooks.Length; i++)
                 {
-                    //timer = followTimer;
-                    //runTimer = true;
-                    // wisp.waypointIndex++;
+                    mouselooks[i].enabled = true;
+                }
+                if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
+                {
+                    // increase speechIndex
                     speechIndex++;
-                    learnedToReload = true;
+                    // set canLook to true
+                    canLook = true;
+                    Debug.Log("Mouse Movement");
+
                 }
             }
-        }
-        // After reload skip
-        #endregion
-        #region Learn to Shoot
-        if (!learnToShoot)
-        {
-            if (Input.GetKey(KeyCode.Mouse1) && Input.GetKey(KeyCode.Mouse0) && speechIndex == 9)
+            #endregion
+            #region Learn to Walk
+            // Learn to walk 
+            if (!learnedToWalk)
             {
-                //if (Enemy.enemyKillCount == 1)
-                //{
+                if (speechIndex == 3)
+                {
+                    if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+                    {
+                        timer = moveTimer;
+                        learnedToWalk = true;
+                        playerMove.restrainMovement = false;
+                        runTimer = true;
+                        wisp.waypointIndex = +2;
+                    }
+                }
+            }
+            #endregion
+            #region Extract Health
+            if (!learnedToExtractHealth && (speechIndex == 4 || speechIndex == 5))
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    // Extract is now true
+                    timer = extractTimer;
+                    runTimer = true;
+                    wisp.waypointIndex++;
+                    learnedToExtractHealth = true;
+                }
+            }
+            #endregion
+            #region Learn to Reload
+            if (!learnedToReload)
+            {
+                if (speechIndex == 6)
+                {
+                    if (Input.GetKeyDown(KeyCode.R) && weapon.javAmmoCartridge > 0)
+                    {
+                        //timer = followTimer;
+                        //runTimer = true;
+                        // wisp.waypointIndex++;
+                        speechIndex++;
+                        learnedToReload = true;
+                    }
+                }
+            }
+            // After reload skip
+            #endregion
+            #region Learn to Shoot
+            if (!learnToShoot)
+            {
+                if (Input.GetKey(KeyCode.Mouse1) && Input.GetKey(KeyCode.Mouse0) && speechIndex == 9)
+                {
+                    //if (Enemy.enemyKillCount == 1)
+                    //{
                     wisp.waypointIndex++;
                     speechIndex++;
                     learnToShoot = true;
-                //}
+                    //}
+                }
             }
-        }
-        #endregion
-        #region Learn to Melee
-        if(!learnToMelee)
-        {
-            playerMove.restrainMelee = false;
-            if(Input.GetKeyDown(KeyCode.Mouse2))
+            #endregion
+            #region Learn to Melee
+            if (!learnToMelee)
             {
-                timer = completeTimer;
-                speechIndex++;
-                wisp.waypointIndex++;
-                learnToMelee = true;
+                playerMove.restrainMelee = false;
+                if (Input.GetKeyDown(KeyCode.Mouse2))
+                {
+                    timer = completeTimer;
+                    speechIndex++;
+                    wisp.waypointIndex++;
+                    learnToMelee = true;
+                }
             }
-        }
-        #endregion
-        #region Timers
-        if (runTimer == true)
-        {
-            storyTimer += Time.deltaTime;
-            if (storyTimer >= timer)
+            #endregion
+            #region Timers
+            if (runTimer == true)
             {
-                speechIndex++;
-                runTimer = false;
-                storyTimer = 0;
+                storyTimer += Time.deltaTime;
+                if (storyTimer >= timer)
+                {
+                    speechIndex++;
+                    runTimer = false;
+                    storyTimer = 0;
+                }
             }
-        }
-        #endregion
-        #endregion
-        if((speechIndex ==1 || speechIndex == 3 || speechIndex == 6 || speechIndex == 9 ) && eSkip.enabled == true)
-        {
-            eSkip.enabled = false;
-        }
-        if ((speechIndex == 2 || speechIndex == 7 || speechIndex == 11 ) && eSkip.enabled == false)
-        {
-            eSkip.enabled = true;
-        }
-        if (Time.timeScale == 0)
-        {
-            tutorialCanvas.SetActive(false);
-            damageSplashScreen.SetActive(false);
-        }
+            #endregion
+            #region Speech
+            if ((speechIndex == 1 || speechIndex == 3 || speechIndex == 6 || speechIndex == 9) && eSkip.enabled == true)
+            {
+                eSkip.enabled = false;
+            }
+            if ((speechIndex == 2 || speechIndex == 7 || speechIndex == 11) && eSkip.enabled == false)
+            {
+                eSkip.enabled = true;
+            }
+            if (Time.timeScale == 0)
+            {
+                tutorialCanvas.SetActive(false);
+                damageSplashScreen.SetActive(false);
+            }
             if (Time.timeScale == 1 && tutorialComplete == false)
             {
                 tutorialCanvas.SetActive(true);
             }
-            if(Time.timeScale == 1)
+            if (Time.timeScale == 1)
             {
                 damageSplashScreen.SetActive(true);
             }
-
+            #endregion
+            #endregion
+        }
     }
     #region Tutorial Method
     void SelectText(int selectedIndex)
@@ -228,6 +234,49 @@ public class GameManager : MonoBehaviour
                 tutTexts[i].enabled = true;
             }
         }
+    }
+
+    #endregion
+    #region Skip Tutorial
+    public void SkipTutorial()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            // Delete tutorial crabs
+            for (int i = 0; i < crabs.Length; i++)
+            {
+                Destroy(crabs[i].gameObject);
+            }
+            // Cur health = 100
+            playerStats.curHealth = playerStats.maxHealth;
+
+            // Disable tutoial canvas
+            tutorialCanvas.SetActive(false);
+            skipCanvas.SetActive(false);
+
+            // Set wisp destination ship
+            wisp.waypointIndex = 6;
+
+            // enable mouse look
+            for (int i = 0; i < mouselooks.Length; i++)
+            {
+                mouselooks[i].enabled = true;
+            }
+
+            // disable restraints
+            playerMove.restrainExtract = true;
+            playerMove.restrainMelee = false;
+            playerMove.restrainMovement = false;
+
+            // learn everything
+            learnedToWalk = true;
+            learnedToExtractHealth = true;
+            learnedToReload = true;
+            learnToShoot = true;
+            learnToMelee = true;
+
+            skipTutorial = true;
+}
     }
     #endregion
 }

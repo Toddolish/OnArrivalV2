@@ -7,7 +7,8 @@ using SteeringBehaviours;
 
 public class Enemy : MonoBehaviour
 {
-	[Header("Base Variables")]
+    #region Base Variables
+    [Header("Base Variables")]
 	public float health = 50f;
 	public float healthDividend;
 	public Image healthBar_Image;
@@ -30,23 +31,27 @@ public class Enemy : MonoBehaviour
 	public GameObject canvas;
     public GameObject[] crabParts;
 	float CanvasCounter;
-
-	[Header("Death Transition")]
+    #endregion
+    #region Death Transition
+    [Header("Death Transition")]
     public Color deathColor = Color.black;
     public float deathDuration = 2f;
     public AnimationCurve deathTransition;
     public static int enemyKillCount;
-
+    #endregion
+    #region Player Detection
     [Header("Player Detection")]
 	public float SeekRadius = 10f;
 	public float knockbackForce = 5f;
 	public float decreaseSpeed = 1f;
-
-	[Header("Agro")]
+    #endregion
+    #region Argo
+    [Header("Agro")]
 	public bool agro;
 	public float agroRange = 200f;
-
-	[Header("Attack")]
+    #endregion
+    #region Attack
+    [Header("Attack")]
 	public bool attacked = false;
 	public float attackTimer;
 	float timer;
@@ -59,7 +64,13 @@ public class Enemy : MonoBehaviour
     Material glowMat;
     bool isDead = false;
     float deathTimer = 0f;
-    
+    #endregion
+    #region Destroy
+    float sinkSpeed;
+    bool sink;
+    float destroyTimer;
+    #endregion
+
     void SetKinematic(bool newValue)
 	{
 		Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
@@ -72,7 +83,8 @@ public class Enemy : MonoBehaviour
 
 	private void Start()
 	{
-		SetKinematic(true);
+        #region References
+        SetKinematic(true);
 		collider = this.GetComponent<CapsuleCollider>();
 		animator = GetComponent<Animator>();
 		aiAgent = this.GetComponent<AIAgent>();
@@ -84,8 +96,9 @@ public class Enemy : MonoBehaviour
 		collider.enabled = false;
 		glowMat = rend.materials[1];
 		canvas.SetActive(false);
-	}
-	public void Update()
+        #endregion
+    }
+    public void Update()
 	{
 		CanvasCounter += Time.deltaTime;
 		if (CanvasCounter > 0.5f)
@@ -127,6 +140,7 @@ public class Enemy : MonoBehaviour
 		}
 		if (health <= 0)
 		{
+            sink = true;
             foreach (GameObject gameObject in crabParts)
             {
                // crabParts.get
@@ -151,6 +165,18 @@ public class Enemy : MonoBehaviour
 			rb.isKinematic = true;
 			resetTime = 0;
 		}
+        #endregion
+        #region Destroy
+        if (sink)
+        {
+            destroyTimer += Time.deltaTime;
+            transform.Translate(Vector3.down * sinkSpeed);
+
+            if (destroyTimer > 5)
+            {
+                Destroy(this.gameObject);
+            }
+        }
         #endregion
 
         DeathTransition();

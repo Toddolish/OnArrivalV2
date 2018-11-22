@@ -9,19 +9,20 @@ public class WaveSpawner : MonoBehaviour
     {
         SPAWNING, WAITING, COUNTING
     }
+
+    [System.Serializable]
+    public class EnemyPrefabs
+    {
+        public GameObject gameObject;
+        public int count;
+    }
+
     [System.Serializable]
     public class Wave
     {
         public string name;
-        public Transform enemy;
-        public int count;
+        public EnemyPrefabs[] enemyPrefabs;
         public float rate;
-
-        public Transform enemy2;
-        public int count2;
-
-        public Transform enemy3;
-        public int count3;
     }
     public Text waveText;
     public int waveCount;
@@ -111,42 +112,30 @@ public class WaveSpawner : MonoBehaviour
         Debug.Log("spawning wave" + _wave.name);
         state = SpawnState.SPAWNING;
 
-        for (int i = 0; i < _wave.count; i++)
+        // Store array of the wave's prefabs
+        EnemyPrefabs[] enemyPrefabs = _wave.enemyPrefabs;
+        // Loop through all enemies in prefabs
+        for (int x = 0; x < enemyPrefabs.Length; x++)
         {
-            SpawnEnemy(_wave.enemy);
-            yield return new WaitForSeconds(1f / _wave.rate); //wait for the amount of seconds
-        }
-        for (int i = 0; i < _wave.count2; i++)
-        {
-            SpawnEnemy2(_wave.enemy2);
-            yield return new WaitForSeconds(1f / _wave.rate); //wait for the amount of seconds
-        }
-        for (int i = 0; i < _wave.count3; i++)
-        {
-            SpawnEnemy3(_wave.enemy3);
-            yield return new WaitForSeconds(1f / _wave.rate); //wait for the amount of seconds
+            // Store enemy's transform of current enemy
+            EnemyPrefabs enemy = enemyPrefabs[x];
+            // Loop through the enemy count
+            for (int i = 0; i < enemy.count; i++)
+            {
+                // Spawn that enemy's gameobject
+                SpawnEnemy(enemy.gameObject);
+                yield return new WaitForSeconds(_wave.rate); //wait for the amount of seconds
+            }
         }
 
         state = SpawnState.WAITING;
 
         yield break; //end with break
     }
-    void SpawnEnemy(Transform _enemy)
+    void SpawnEnemy(GameObject _enemy)
     {
         //Debug.Log("spawning enemy" + _enemy.name);
         Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
         Instantiate(_enemy, _sp.position, _sp.rotation);
-    }
-    void SpawnEnemy2(Transform _enemy2)
-    {
-        //Debug.Log("spawning enemy" + _enemy2.name);
-        Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Instantiate(_enemy2, _sp.position, _sp.rotation);
-    }
-    void SpawnEnemy3(Transform _enemy3)
-    {
-        //Debug.Log("spawning enemy" + _enemy2.name);
-        Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Instantiate(_enemy3, _sp.position, _sp.rotation);
     }
 }

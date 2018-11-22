@@ -177,7 +177,7 @@ public class PlayerMovment : MonoBehaviour
                     spikePlant = shootHit.transform.GetComponent<SpikePlant>();
                     if (spikePlant.curSap >= 2.4)
                     {
-                        collectText.enabled = true;
+                        //collectText.enabled = true;
                         if (Input.GetKeyDown(KeyCode.E) && spikePlant.timeForHarvest)
                         {
                             if (!pickup)
@@ -200,7 +200,7 @@ public class PlayerMovment : MonoBehaviour
                     }
                     else
                     {
-                        collectText.enabled = false;
+                        // CollectText.enabled = false;
                     }
                 }
             }

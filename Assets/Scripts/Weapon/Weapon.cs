@@ -140,7 +140,6 @@ public class Weapon : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, layersToHit))
 		{
-			Debug.Log(hit.transform.gameObject.name);
 			Target target = hit.transform.GetComponent<Target>();
 			Enemy enemy = hit.transform.GetComponent<Enemy>();
 			if (target != null)
